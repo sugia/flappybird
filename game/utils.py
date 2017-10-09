@@ -254,35 +254,3 @@ class GameState:
     for digit in scoreDigits:
         SCREEN.blit(IMAGES['numbers'][digit], (Xoffset, SCREEN_HEIGHT * 0.1))
         Xoffset += IMAGES['numbers'][digit].get_width()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
