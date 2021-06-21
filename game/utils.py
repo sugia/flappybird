@@ -13,6 +13,7 @@ INIT_BIRD_Y = 256
 PIPE_INTERSPACE = 140
 PIPE_HEIGHT_DELTA = 50
 
+tf.compat.v1.disable_eager_execution()
 pygame.init()
 FPS_CLOCK = pygame.time.Clock()
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -49,11 +50,12 @@ PLAYER_HEIGHT = IMAGES['player'].get_height()
 PIPE_WIDTH = IMAGES['pipe_upper'].get_width()
 PIPE_HEIGHT = IMAGES['pipe_upper'].get_height()
 
-sess = tf.Session()
+# sess = tf.Session()
+sess = tf.compat.v1.Session()
 
 class Bird:
   def __init__(self, input_nodes, hidden_nodes, output_nodes):
-    self.input_signal = tf.placeholder(shape=[None, input_nodes], dtype=tf.float32)
+    self.input_signal = tf.compat.v1.placeholder(shape=[None, input_nodes], dtype=tf.float32)
     self.w1 = self.InitVariable(shape=[input_nodes, hidden_nodes])
     self.b1 = self.InitVariable(shape=[hidden_nodes])
     self.hidden_layer = tf.matmul(self.input_signal, self.w1) + self.b1
@@ -62,9 +64,9 @@ class Bird:
     self.b2 = self.InitVariable(shape=[output_nodes])
     self.output_layer = tf.sigmoid(tf.matmul(self.hidden_layer, self.w2) + self.b2)
 
-    self.output_signal = tf.placeholder(shape=[None, output_nodes], dtype=tf.float32)
+    self.output_signal = tf.compat.v1.placeholder(shape=[None, output_nodes], dtype=tf.float32)
     self.loss = tf.reduce_mean(tf.square(self.output_layer - self.output_signal))
-    self.train = tf.train.GradientDescentOptimizer(0.01).minimize(self.loss)
+    self.train = tf.compat.v1.train.GradientDescentOptimizer(0.01).minimize(self.loss)
 
     self.x = INIT_BIRD_X
     self.y = INIT_BIRD_Y
@@ -75,7 +77,7 @@ class Bird:
     self.jump = -45
 
   def InitVariable(self, shape):
-    return tf.Variable(tf.truncated_normal(shape=shape, stddev=10))
+    return tf.Variable(tf.compat.v1.truncated_normal(shape=shape, stddev=10))
 
   def Train(self, input_signal, output_signal):
     for i in range(100):
@@ -149,7 +151,7 @@ class GameState:
 
     self.alives = len(self.birds)
 
-    init = tf.global_variables_initializer()
+    init = tf.compat.v1.global_variables_initializer()
     sess.run(init)
 
     self.Display()
